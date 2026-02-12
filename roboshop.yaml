@@ -1,22 +1,29 @@
----
-- name: create ec2-instances and route53 records
+- name: create instances and route53 record
   hosts: all
   connection: local
   vars:
-   sg_id: "sg-092464f7c3ff76b0c"
-   ami_id: "ami-0220d79f3f480ecf5"
-   env: "dev"
-   insatnces:
-     - mongodb
-     - catalogue
+    sg-id: "sg-092464f7c3ff76b0c"
+    ami_id: "ami-0220d79f3f480ecf5"
+    env : "dev"
+    domain_name: "chakri.sbs"
+    instances:
+     -mongodb
+     -redis
   tasks:
    - name: start an instance with a public IP address
      amazon.aws.ec2_instance:
-      name: "{{ item }}-{{ env }}"
-      instance_type: t3.micro
-      security_group: "{{ sg_id }}" 
-      image_id: "{{ ami_id}}"
+      instance_type: t3.micro  
+      image_id: "{{ ami_id }}"
+      security_group: "{{ sg-id }}"
+      name: "{{ instance }}-{{ env }}.{{ domain_name}}"
       tags:
-       Environment: "{{ env }}"
-       Name: "{{ item }}-{{ env }}" 
-       component: "{{ item }}"
+        Name: "{{ instance }}-{{ env }}.{{ domain_name}}" 
+        Project: "roboshop"
+        component: "{{ instance }}"
+        env: "{{ env }}"
+      loop: "{{ instances }}"
+      register: ec2_output
+
+    -name: print ec2_output
+     debug:
+      msg: "{{ ec2_output }}"
