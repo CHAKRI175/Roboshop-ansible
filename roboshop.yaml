@@ -2,7 +2,7 @@
   hosts: all
   connection: local
   vars:
-    sg-id: "sg-092464f7c3ff76b0c"
+    sg_id: "sg-092464f7c3ff76b0c"
     ami_id: "ami-0220d79f3f480ecf5"
     env : "dev"
     domain_name: "chakri.sbs"
@@ -14,7 +14,7 @@
      amazon.aws.ec2_instance:
       instance_type: t3.micro  
       image_id: "{{ ami_id }}"
-      security_group: "{{ sg-id }}"
+      security_group: "{{ sg_id }}"
       name: "{{ instance }}-{{ env }}.{{ domain_name}}"
       tags:
         Name: "{{ instance }}-{{ env }}.{{ domain_name}}" 
