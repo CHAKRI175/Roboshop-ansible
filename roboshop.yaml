@@ -1,6 +1,6 @@
 ---
 - name: create ec2-instances and route53 records
-  hosts: localhost
+  hosts: all
   connection: local
   vars:
    sg_id: "sg-092464f7c3ff76b0c"
