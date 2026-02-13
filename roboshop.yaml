@@ -8,8 +8,8 @@
     env: dev
     action: create
     instances:
-      - mongodb
-      - redis
+    - mongodb
+    - redis
   tasks:
  
   - name: create ec2 instance
