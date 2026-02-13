@@ -8,8 +8,8 @@
     env: dev
     action: create
     instances:
-    - mongodb
-    - redis
+     - mongodb
+     - redis
   tasks:
     - name: create ec2 instance
       amazon.aws.ec2_instance:
@@ -17,11 +17,11 @@
         image_id: "{{ ami_id }}"
         security_group: "{{ sg_id }}"
         name: "{{ item }}-{{ env }}"
-        tag:
+        tags:
           Name: "{{ item }}-{{ env }}"
           Project: roboshop
           Environment: "{{ env }}"  
           Component: "{{ item }}"
-        loop: "{{ instances }}"
-        register: ec2_output
-        when: action == "create"
+      loop: "{{ instances }}"
+      register: ec2_output
+      when: action == "create"
