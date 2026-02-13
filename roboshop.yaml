@@ -1,4 +1,4 @@
-- name: create ec2-instances and route53 records
+- name: create ec2 and r53 records
   hosts: all
   connection: local
   vars:
@@ -9,20 +9,20 @@
     action: create
     instances:
     - mongodb
-    - redis
+    - catalogue
   tasks:
- 
+  ### CREATE ###
   - name: create ec2 instance
     amazon.aws.ec2_instance:
       instance_type: "t3.micro"
-      image_id: "{{ ami_id }}"
       security_group: "{{ sg_id }}"
+      image_id: "{{ ami_id }}"
       name: "{{ item }}-{{ env }}"
       tags:
-        Name: "{{ item }}-{{ env }}"
         Project: roboshop
-        Environment: "{{ env }}"
         Component: "{{ item }}"
+        Environment: "{{ env }}"
+        Name: "{{ item }}-{{ env }}"
     loop: "{{ instances }}"
     register: ec2_output
     when: action == "create"
