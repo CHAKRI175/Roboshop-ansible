@@ -33,7 +33,7 @@
     when: instance_action == "create"
 
   - name: Route 53 A Record Update
-    route53:
+    amazon.aws.route53:
       state: present
       zone: "{{ domain_name }}"
       record: "{{ item }}-{{ env }}.{{ domain_name }}"
@@ -43,10 +43,10 @@
       wait: false
       overwrite: true
     loop: "{{ ec2_output.results }}"
-    when: action == "create"
+    when: instance_action == "create"
 
   - name: create r53 record for frontend
-    route53:
+    amazon.aws.route53:
       state: present
       zone: "{{ domain_name }}"
       record: "frontend-{{ env }}.{{ domain_name }}"
