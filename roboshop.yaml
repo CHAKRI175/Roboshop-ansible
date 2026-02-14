@@ -6,7 +6,7 @@
     ami_id: ami-0220d79f3f480ecf5
     domain_name: chakri.sbs
     env: dev
-    action: create
+    instance_action: create
     instances:
     - mongodb
     - catalogue
@@ -25,4 +25,10 @@
         Name: "{{ item }}-{{ env }}"
     loop: "{{ instances }}"
     register: ec2_output
-    when: action == "create"
+    when: instance_action == "create"
+
+  - name: print ec2 output
+    amazon.builtin.debug:
+      msg: "{{ ec2_output }}"
+    when: instance_action == "create"
+    
