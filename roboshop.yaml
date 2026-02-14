@@ -31,3 +31,31 @@
     debug:
       msg: "{{ ec2_output }}"
     when: instance_action == "create"
+
+  - name: Route 53 A Record Update
+    route53:
+      state: present
+      zone: "{{ domain_name }}"
+      record: "{{ item }}-{{ env }}.{{ domain_name }}"
+      type: A
+      ttl: 1
+      value: "{{ ec2_output.results[0].instances[0].private_ip_address }}"
+      wait: false
+      overwrite: true
+    loop: "{{ ec2_output.results }}"
+    when: action == "create"
+
+  - name: create r53 record for frontend
+    route53:
+      state: present
+      zone: "{{ domain_name }}"
+      record: "frontend-{{ env }}.{{ domain_name }}"
+      type: A
+      ttl: 1  
+      value: "{{ item.instances[0].public_ip_address }}"
+      wait: false
+    overwrite: true
+  loop: "{{ ec2_output.results }}"
+  when:
+  - instance_action == "create"  
+  - item.item == "frontend"
