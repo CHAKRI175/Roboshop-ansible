@@ -28,7 +28,6 @@
     when: instance_action == "create"
 
   - name: print ec2 output
-    amazon.builtin.debug:
+    debug:
       msg: "{{ ec2_output }}"
     when: instance_action == "create"
-    
